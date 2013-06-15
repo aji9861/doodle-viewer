@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" >Doodle Viewer</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- URLS -->
+    <string name="google_base">http://www.google.com/</string>
+    <string name="google_doodle_base">http://www.google.com/doodles/</string>
+
+</resources>

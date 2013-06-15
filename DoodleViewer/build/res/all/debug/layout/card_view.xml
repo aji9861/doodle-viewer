@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              style="@style/nowCardStyle"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              tools:context=".MainActivity">
+
+
+    <TextView
+            android:id="@+id/doodleTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+    <TextView
+            android:id="@+id/doodleDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+    <WebView
+            android:id="@+id/doodleStandalone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </WebView>
+
+
+    <com.runnirr.doodleviewer.fetcher.DoodleBanner
+            android:id="@+id/doodleImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    </com.runnirr.doodleviewer.fetcher.DoodleBanner>
+    <WebView
+            android:id="@+id/doodleContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    </WebView>
+
+</LinearLayout>
