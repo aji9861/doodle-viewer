@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.runnirr.doodleviewer.display.MainLayout
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:onClick="layoutOnClick">
 
     <include
             android:layout_width="match_parent"
@@ -16,4 +18,4 @@
 
 
 
-</RelativeLayout>
+</com.runnirr.doodleviewer.display.MainLayout>

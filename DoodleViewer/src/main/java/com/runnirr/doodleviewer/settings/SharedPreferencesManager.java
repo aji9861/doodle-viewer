@@ -13,13 +13,11 @@ public class SharedPreferencesManager {
     private final String YEAR_KEY = "RECENT_YEAR";
 
     private final Context mContext;
-    private final SharedPreferences mDateSharedPreferences;
 
     private static SharedPreferencesManager self = null;
 
     private SharedPreferencesManager(final Context c){
         this.mContext = c;
-        mDateSharedPreferences = c.getSharedPreferences(DATE_PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public synchronized static SharedPreferencesManager getInstance(final Context c){
@@ -29,20 +27,24 @@ public class SharedPreferencesManager {
         return self;
     }
 
+    private SharedPreferences getSharedPreferences(){
+        return mContext.getSharedPreferences(DATE_PREF_NAME, Context.MODE_PRIVATE);
+    }
+
     public int getStoredYear(){
-        return mDateSharedPreferences.getInt(YEAR_KEY, SettingsManager.getCurrentYear());
+        return getSharedPreferences().getInt(YEAR_KEY, SettingsManager.getCurrentYear());
     }
 
     public int getStoredMonth(){
-        return mDateSharedPreferences.getInt(MONTH_KEY, SettingsManager.getCurrentMonth());
+        return getSharedPreferences().getInt(MONTH_KEY, SettingsManager.getCurrentMonth());
     }
 
     public void setStoredYear(int year){
-        mDateSharedPreferences.edit().putInt(YEAR_KEY, year);
+        getSharedPreferences().edit().putInt(YEAR_KEY, year).apply();
     }
 
     public void setStoredMonth(int month){
-        mDateSharedPreferences.edit().putInt(MONTH_KEY, month);
+        getSharedPreferences().edit().putInt(MONTH_KEY, month).apply();
     }
 
 }

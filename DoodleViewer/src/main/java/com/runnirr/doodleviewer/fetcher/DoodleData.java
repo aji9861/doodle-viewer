@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 
 public class DoodleData implements Serializable {
@@ -31,6 +32,27 @@ public class DoodleData implements Serializable {
     public final Boolean is_dynamic;
 
     private transient Bitmap image = null;
+
+    public DoodleData(){
+        // Dummy data when no results
+        standalone_html = null;
+        finish = null;
+        name = null;
+        run_date = null;
+        title = "No Result";
+        url = null;
+        countries = null;
+        height = null;
+        blacklist = null;
+        start = null;
+        blog_text = null;
+        id = null;
+        alternate_url = null;
+        is_global = null;
+        width = null;
+        tags = null;
+        is_dynamic = null;
+    }
 
 	public DoodleData(String standalone_html,
             Long finish,
@@ -92,6 +114,8 @@ public class DoodleData implements Serializable {
     }
 
     public String getDateString(){
-        return new SimpleDateFormat("MMM dd, yyyy").format(getStartMilli());
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(getStartMilli());
     }
 }

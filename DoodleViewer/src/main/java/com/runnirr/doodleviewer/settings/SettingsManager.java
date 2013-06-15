@@ -107,6 +107,7 @@ public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> imp
         if(newMonth >= 0 && prevMonth != newMonth){
             spm.setStoredMonth(newMonth);
             toNotify = true;
+            newMonth += 1; /* If it is a month (not all) change it to base 1 for use below */
         }
 
         int prevYear = spm.getStoredYear();
@@ -134,7 +135,7 @@ public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> imp
         // nothing
     }
 
-    private enum Month {
+    public enum Month {
         all(-1),
         January(Calendar.JANUARY),
         February(Calendar.FEBRUARY),
@@ -149,7 +150,7 @@ public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> imp
         November(Calendar.NOVEMBER),
         December(Calendar.DECEMBER);
 
-        final int value;
+        public final int value;
         private Month(int v){
             value = v;
         }

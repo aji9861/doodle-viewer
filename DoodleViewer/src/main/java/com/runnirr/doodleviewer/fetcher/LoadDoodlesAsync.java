@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Calendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,14 +18,19 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.runnirr.doodleviewer.DoodleActivity;
-import com.runnirr.doodleviewer.messages.DoodleEventListener;
+import com.runnirr.doodleviewer.messages.DoodleUIUpdater;
+import com.runnirr.doodleviewer.settings.SettingsManager;
 
-public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> implements DoodleEventListener<Integer[]> {
+public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> {
 
-    private Activity mActivity;
+    private static final String TAG = LoadDoodlesAsync.class.getSimpleName();
 
-    public LoadDoodlesAsync(final Activity a){
+    private final Activity mActivity;
+    private final DoodleUIUpdater mUIUpdater;
+
+    public LoadDoodlesAsync(final Activity a, final DoodleUIUpdater ui){
         mActivity = a;
+        mUIUpdater = ui;
     }
 
 	@Override
@@ -33,11 +39,25 @@ public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> implements 
         int year = params[0];
         int month = params[1];
 
-        JSONArray doodleItems = getDoodleJsonArray(year, month);
-        createDoodleItems(doodleItems);
+        initializeUI();
+        if(month == SettingsManager.Month.all.value){
+            for (int i = Calendar.DECEMBER; i >= Calendar.JANUARY; i--){
+                // TODO: This runs out of memory for large years
+                int cMonth = i + 1; /* Make January 1 instead of 0 */
+                JSONArray doodleItems = getDoodleJsonArray(year, cMonth);
+                createDoodleItems(doodleItems);
+            }
+        }else{
+            JSONArray doodleItems = getDoodleJsonArray(year, month);
+            createDoodleItems(doodleItems);
+        }
 
 		return null;
 	}
+
+    private void initializeUI(){
+        mUIUpdater.resetView();
+    }
 
 	private JSONArray getDoodleJsonArray(int year, int month){
 		String url = "http://www.google.com/doodles/json/" + year + "/" + month;
@@ -54,14 +74,18 @@ public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> implements 
 		    }
 		    doodleJsonArray = new JSONArray(strData);
 		}catch(JSONException e){
-			// TODO: Too lazy to do this
+            Log.e(TAG, e.getMessage(), e);
 		}catch(IOException e){
-            // TODO: Too lazy to do this
+            Log.e(TAG, e.getMessage(), e);
         }
 		return doodleJsonArray;
 	}
 	
-	private void createDoodleItems(JSONArray doodleItems){		
+	private void createDoodleItems(JSONArray doodleItems){
+        if(doodleItems.length() == 0){
+            new LoadDoodleImageAsync().execute(new DoodleData());
+            return;
+        }
 		for (int i = 0; i < doodleItems.length(); i++){
 			DoodleData dd = null;
 			try {
@@ -82,9 +106,4 @@ public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> implements 
         return new Gson().fromJson(doodleObject.toString(), DoodleData.class);
 	}
 
-
-    @Override
-    public void onNewInformation(Integer[] data) {
-        this.execute(data);
-    }
 }

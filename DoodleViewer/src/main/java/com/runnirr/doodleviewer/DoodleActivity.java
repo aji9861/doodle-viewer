@@ -8,30 +8,35 @@ import android.view.MenuItem;
 import com.runnirr.doodleviewer.display.SlidingLayer;
 import com.runnirr.doodleviewer.fetcher.DataCollector;
 import com.runnirr.doodleviewer.fetcher.LoadDoodlesAsync;
+import com.runnirr.doodleviewer.messages.DoodleEventListener;
 import com.runnirr.doodleviewer.messages.DoodleUIUpdater;
 import com.runnirr.doodleviewer.settings.SettingsManager;
 import com.runnirr.doodleviewer.settings.SharedPreferencesManager;
 
-public class DoodleActivity extends Activity {
+public class DoodleActivity extends Activity implements DoodleEventListener<Integer[]>{
     public static final String TAG = DoodleActivity.class.getSimpleName();
     private SlidingLayer mSlidingLayer;
     private SharedPreferencesManager mPreferencesManager;
+    private DoodleUIUpdater mUIUpdater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        DataCollector.getInstance().registerListener(new DoodleUIUpdater(this));
+
+        mUIUpdater = new DoodleUIUpdater(this);
+        DataCollector.getInstance().registerListener(mUIUpdater);
+
         mSlidingLayer = (SlidingLayer) findViewById(R.id.slidingLayer);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         SettingsManager settingsManager = new SettingsManager(this);
 
         mPreferencesManager = SharedPreferencesManager.getInstance(this);
-        LoadDoodlesAsync lda = new LoadDoodlesAsync(this);
-        settingsManager.registerListener(lda);
-        lda.execute(mPreferencesManager.getStoredYear(), mPreferencesManager.getStoredMonth());
+        LoadDoodlesAsync lda = new LoadDoodlesAsync(this, mUIUpdater);
+        settingsManager.registerListener(this);
+        lda.execute(mPreferencesManager.getStoredYear(), mPreferencesManager.getStoredMonth() + 1); /* convert from Jan = 0 to Jan = 1 */
     }
 
 
@@ -58,5 +63,16 @@ public class DoodleActivity extends Activity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onNewInformation(Integer[] data) {
+        new LoadDoodlesAsync(this, mUIUpdater).execute(data);
+    }
+
+    public void layoutOnClick(){
+        if(mSlidingLayer.isOpened()){
+            mSlidingLayer.closeLayer(true);
+        }
     }
 }

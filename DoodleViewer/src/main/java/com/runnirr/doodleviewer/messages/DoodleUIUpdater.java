@@ -2,20 +2,20 @@ package com.runnirr.doodleviewer.messages;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.runnirr.doodleviewer.R;
+import com.runnirr.doodleviewer.display.CardView;
 import com.runnirr.doodleviewer.fetcher.DoodleData;
 
-import java.text.SimpleDateFormat;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Adam on 6/14/13.
@@ -26,26 +26,61 @@ public class DoodleUIUpdater implements DoodleEventListener<DoodleData> {
 
     private final Activity mActivity;
     private final View mLoadingSpinner;
+    private final ViewGroup mCardContainer;
+    // Semaphore for updating the UI
+    private final Semaphore mUIFlag = new Semaphore(1);
 
     public DoodleUIUpdater(Activity a){
         mActivity = a;
         mLoadingSpinner = mActivity.findViewById(R.id.loadingSpinnerContainer);
+        mCardContainer = (ViewGroup) mActivity.findViewById(R.id.cardContainer);
     }
 
     @Override
     public void onNewInformation(final DoodleData dd) {
         Runnable r = new Runnable() {
             public void run() {
-                addView(dd);
+                addCardView(dd);
+                mUIFlag.release();
             }
         };
 
-        mActivity.runOnUiThread(r);
+        try{
+            mUIFlag.acquire();
+            mActivity.runOnUiThread(r);
+        } catch (InterruptedException e){
+            Log.e(TAG, e.getMessage(), e);
+        }
+
     }
 
-    private void addView(final DoodleData dd){
+    public void resetView(){
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mLoadingSpinner.setVisibility(View.VISIBLE);
+                mCardContainer.removeViews(1, mCardContainer.getChildCount() - 1); /* loadingSpinner is element 0 */
+                mUIFlag.release();
+            }
+        };
+
+        try{
+            mUIFlag.acquire();
+            mActivity.runOnUiThread(r);
+        } catch (InterruptedException e){
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+
+    }
+
+    /**
+     * This should only get called from the onNewInformation method
+     * @param dd
+     */
+    private void addCardView(final DoodleData dd){
         LayoutInflater vi = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = vi.inflate(R.layout.card_view, null);
+        CardView v = (CardView) vi.inflate(R.layout.card_view, null);
         final String baseUrl = mActivity.getResources().getString(R.string.google_base);
 
         // fill in any details dynamically here
@@ -83,12 +118,20 @@ public class DoodleUIUpdater implements DoodleEventListener<DoodleData> {
             standaloneView.getSettings().setJavaScriptEnabled(false);
         }
 
-        // insert into main view
-        ViewGroup insertPoint = (ViewGroup) mActivity.findViewById(R.id.cardContainer);
         if(mLoadingSpinner.getVisibility() == View.VISIBLE){
             mLoadingSpinner.setVisibility(View.GONE);
         }
-        insertPoint.addView(v, insertPoint.getChildCount(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // insert into main view
+        addViewInStartOrder(v);
     }
 
+
+    //TODO: insert  in date order
+    private void addViewInStartOrder(CardView cv){
+        int insertIndex = mCardContainer.getChildCount();
+
+        mCardContainer.addView(cv, insertIndex,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+    }
 }
