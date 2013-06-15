@@ -14,8 +14,6 @@
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":DoodleViewer" />
-        <option name="PROJECT_ABSOLUTE_PATH" value="C:\Users\Adam\repos\DoodleViewerProject" />
-        <option name="GRADLE_HOME_DIR_PATH" />
       </configuration>
     </facet>
   </component>
@@ -68,6 +66,7 @@
     <orderEntry type="jdk" jdkName="Android 4.2.2" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="android-support-v4" level="project" />
+    <orderEntry type="library" name="gson-2.2.4" level="project" />
   </component>
 </module>
 
