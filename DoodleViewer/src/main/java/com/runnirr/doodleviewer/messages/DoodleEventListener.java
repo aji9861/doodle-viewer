@@ -5,7 +5,7 @@ import com.runnirr.doodleviewer.fetcher.DoodleData;
 /**
  * Created by Adam on 6/14/13.
  */
-public interface DoodleEventListener {
+public interface DoodleEventListener<T> {
 
-    void onNewDoodleLoaded(DoodleData dd);
+    void onNewInformation(final T data);
 }

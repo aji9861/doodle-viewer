@@ -6,6 +6,6 @@
 
     <!-- URLS -->
     <string name="google_base">http://www.google.com/</string>
-    <string name="google_doodle_base">http://www.google.com/doodles/</string>
+    <string name="google_doodle_base">http://www.google.com/doodles/</string><string name="save_data">Save data</string>
 
 </resources>

@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by Adam on 6/14/13.
  */
-public class DoodleUIUpdater implements DoodleEventListener {
+public class DoodleUIUpdater implements DoodleEventListener<DoodleData> {
 
     private static final String TAG = DoodleUIUpdater.class.getSimpleName();
 
@@ -33,7 +33,7 @@ public class DoodleUIUpdater implements DoodleEventListener {
     }
 
     @Override
-    public void onNewDoodleLoaded(final DoodleData dd) {
+    public void onNewInformation(final DoodleData dd) {
         Runnable r = new Runnable() {
             public void run() {
                 addView(dd);
@@ -41,9 +41,7 @@ public class DoodleUIUpdater implements DoodleEventListener {
         };
 
         mActivity.runOnUiThread(r);
-
     }
-
 
     private void addView(final DoodleData dd){
         LayoutInflater vi = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-     <integer name="config_slide_time">800</integer>
+    <integer name="config_slide_time">800</integer>
+
+    <!-- Earliest Doodle is October, 1999 (January is 0)-->
+    <integer name="earliest_doodle_month">9</integer>
+    <integer name="earliest_doodle_year">1999</integer>
 </resources>
