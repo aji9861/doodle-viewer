@@ -8,5 +8,5 @@ gradlew.bat
 *.iml
 *.ipr
 *.iws
-
+*build/
 

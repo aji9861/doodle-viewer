@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.runnirr.doodleviewer.R;
@@ -24,9 +25,11 @@ public class DoodleUIUpdater implements DoodleEventListener {
     private static final String TAG = DoodleUIUpdater.class.getSimpleName();
 
     private final Activity mActivity;
+    private final Spinner mLoadingSpinner;
 
     public DoodleUIUpdater(Activity a){
         mActivity = a;
+        mLoadingSpinner = (Spinner) mActivity.findViewById(R.id.loadingSpinner);
     }
 
     @Override
@@ -60,9 +63,11 @@ public class DoodleUIUpdater implements DoodleEventListener {
         WebView standaloneView = (WebView) v.findViewById(R.id.doodleStandalone);
         if(dd.standalone_html != null && !dd.standalone_html.isEmpty()){
             standaloneView.loadUrl(baseUrl + dd.standalone_html);
+            standaloneView.getSettings().setJavaScriptEnabled(true);
             standaloneView.setVisibility(View.VISIBLE);
         }else{
             standaloneView.setVisibility(View.GONE);
+            standaloneView.getSettings().setJavaScriptEnabled(false);
         }
 
         // Image
@@ -71,15 +76,20 @@ public class DoodleUIUpdater implements DoodleEventListener {
 
         // Content
         WebView contentView = (WebView) v.findViewById(R.id.doodleContent);
-        if (dd.blog_text.length() <= 0){
-            contentView.setVisibility(View.GONE);
-        }else{
+        if (!dd.blog_text.isEmpty()){
             contentView.loadDataWithBaseURL(baseUrl, dd.blog_text, "text/html", "UTF-8", null);
+            standaloneView.getSettings().setJavaScriptEnabled(true);
             contentView.setVisibility(View.VISIBLE);
+        }else{
+            contentView.setVisibility(View.GONE);
+            standaloneView.getSettings().setJavaScriptEnabled(false);
         }
 
         // insert into main view
         ViewGroup insertPoint = (ViewGroup) mActivity.findViewById(R.id.cardContainer);
+        if(mLoadingSpinner.getVisibility() == View.VISIBLE){
+            mLoadingSpinner.setVisibility(View.GONE);
+        }
         insertPoint.addView(v, insertPoint.getChildCount(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 

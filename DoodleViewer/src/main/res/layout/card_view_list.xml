@@ -1,0 +1,30 @@
+<ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true" >
+
+        <com.runnirr.doodleviewer.display.CardLayout
+                android:id="@+id/cardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/darker_gray">
+
+            <Spinner
+                    android:id="@+id/loadingSpinner"
+                    android:layout_width="@dimen/spinner_size"
+                    android:layout_height="@dimen/spinner_size"
+                    android:layout_gravity="center|center_vertical" />
+
+          <!--  <TextView
+                    android:id="@+id/txtView"
+                    style="@style/nowCardStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hello_world"
+                    tools:context=".MainActivity" /> -->
+
+        </com.runnirr.doodleviewer.display.CardLayout>
+
+</ScrollView>

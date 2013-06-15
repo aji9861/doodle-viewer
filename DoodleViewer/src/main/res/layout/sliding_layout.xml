@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.runnirr.doodleviewer.display.SlidingLayer
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:slidingLayer="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/slidingLayer"
+        android:layout_width="@dimen/layer_width"
+        android:layout_height="match_parent"
+        slidingLayer:shadowDrawable="@drawable/sidebar_shadow"
+        slidingLayer:shadowWidth="@dimen/shadow_width"
+        slidingLayer:stickTo="left"
+        slidingLayer:closeOnTapEnabled="true">
+
+    <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/setting_fields" />
+
+</com.runnirr.doodleviewer.display.SlidingLayer>
