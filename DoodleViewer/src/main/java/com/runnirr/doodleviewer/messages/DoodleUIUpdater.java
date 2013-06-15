@@ -25,11 +25,11 @@ public class DoodleUIUpdater implements DoodleEventListener {
     private static final String TAG = DoodleUIUpdater.class.getSimpleName();
 
     private final Activity mActivity;
-    private final Spinner mLoadingSpinner;
+    private final View mLoadingSpinner;
 
     public DoodleUIUpdater(Activity a){
         mActivity = a;
-        mLoadingSpinner = (Spinner) mActivity.findViewById(R.id.loadingSpinner);
+        mLoadingSpinner = mActivity.findViewById(R.id.loadingSpinnerContainer);
     }
 
     @Override
