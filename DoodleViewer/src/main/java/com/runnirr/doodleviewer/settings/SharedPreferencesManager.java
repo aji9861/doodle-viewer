@@ -5,10 +5,11 @@ import android.content.SharedPreferences;
 
 /**
  * Created by Adam on 6/15/13.
+ *
+ * Abstraction for accessing SharedPreferences for the application
  */
 public class SharedPreferencesManager {
 
-    private final String DATE_PREF_NAME = "MOST_RECENT_DATE";
     private final String MONTH_KEY = "RECENT_MONTH";
     private final String YEAR_KEY = "RECENT_YEAR";
 
@@ -28,6 +29,7 @@ public class SharedPreferencesManager {
     }
 
     private SharedPreferences getSharedPreferences(){
+        final String DATE_PREF_NAME = "MOST_RECENT_DATE";
         return mContext.getSharedPreferences(DATE_PREF_NAME, Context.MODE_PRIVATE);
     }
 

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 /**
  * Created by Adam on 6/15/13.
+ *
+ * Basic class to be extended for transmitting doodle events
  */
 public class SimpleDoodleEventTransmitter<T> implements DoodleEventTransmitter<T> {
 

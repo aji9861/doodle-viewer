@@ -1,26 +1,16 @@
 package com.runnirr.doodleviewer.display;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.runnirr.doodleviewer.R;
-import com.runnirr.doodleviewer.fetcher.DoodleData;
-
-import java.text.SimpleDateFormat;
-import java.util.Observable;
-import java.util.Observer;
 
 public class CardLayout extends LinearLayout implements OnGlobalLayoutListener {
 
@@ -39,20 +29,34 @@ public class CardLayout extends LinearLayout implements OnGlobalLayoutListener {
 
 	private void initLayoutObserver() {
 		setOrientation(LinearLayout.VERTICAL);
-		getViewTreeObserver().addOnGlobalLayoutListener(this);
+		ViewTreeObserver vto = getViewTreeObserver();
+        if (vto != null){
+            vto.addOnGlobalLayoutListener(this);
+        }
 	}
 
 	@Override
 	public void onGlobalLayout() {
-		getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        ViewTreeObserver vto = getViewTreeObserver();
+        if (vto != null){
+            vto.removeGlobalOnLayoutListener(this);
+        }
 
-		final int heightPx = getContext().getResources().getDisplayMetrics().heightPixels;
+        final Context c = getContext();
+        if (c == null) {
+            return;
+        }
+
+		final int heightPx = c.getResources().getDisplayMetrics().heightPixels;
 
 		boolean inversed = false;
 		final int childCount = getChildCount();
 
 		for (int i = 0; i < childCount; i++) {
 			View child = getChildAt(i);
+            if(child == null){
+                continue;
+            }
 
 			int[] location = new int[2];
 
@@ -62,12 +66,17 @@ public class CardLayout extends LinearLayout implements OnGlobalLayoutListener {
 				break;
 			}
 
+
 			if (!inversed) {
-				child.startAnimation(AnimationUtils.loadAnimation(getContext(),
-						R.anim.slide_up_left));
+                Animation animation = AnimationUtils.loadAnimation(c, R.anim.slide_up_left);
+                if(animation != null){
+				    child.startAnimation(animation);
+                }
 			} else {
-				child.startAnimation(AnimationUtils.loadAnimation(getContext(),
-						R.anim.slide_up_right));
+                Animation animation = AnimationUtils.loadAnimation(c, R.anim.slide_up_right);
+                if(animation != null){
+				    child.startAnimation(animation);
+                }
 			}
 
 			inversed = !inversed;
@@ -75,9 +84,4 @@ public class CardLayout extends LinearLayout implements OnGlobalLayoutListener {
 
 	}
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        return super.onTouchEvent(event);
-    }
 }

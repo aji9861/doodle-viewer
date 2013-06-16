@@ -1,5 +1,6 @@
 package com.runnirr.doodleviewer;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -16,7 +17,6 @@ import com.runnirr.doodleviewer.settings.SharedPreferencesManager;
 public class DoodleActivity extends Activity implements DoodleEventListener<Integer[]>{
     public static final String TAG = DoodleActivity.class.getSimpleName();
     private SlidingLayer mSlidingLayer;
-    private SharedPreferencesManager mPreferencesManager;
     private DoodleUIUpdater mUIUpdater;
 
     @Override
@@ -30,13 +30,17 @@ public class DoodleActivity extends Activity implements DoodleEventListener<Inte
 
         mSlidingLayer = (SlidingLayer) findViewById(R.id.slidingLayer);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getActionBar();
+        if(ab != null){
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+
         SettingsManager settingsManager = new SettingsManager(this);
 
-        mPreferencesManager = SharedPreferencesManager.getInstance(this);
-        LoadDoodlesAsync lda = new LoadDoodlesAsync(this, mUIUpdater);
+        SharedPreferencesManager preferencesManager = SharedPreferencesManager.getInstance(this);
+        LoadDoodlesAsync lda = new LoadDoodlesAsync(mUIUpdater);
         settingsManager.registerListener(this);
-        lda.execute(mPreferencesManager.getStoredYear(), mPreferencesManager.getStoredMonth() + 1); /* convert from Jan = 0 to Jan = 1 */
+        lda.execute(preferencesManager.getStoredYear(), preferencesManager.getStoredMonth() + 1); /* convert from Jan = 0 to Jan = 1 */
     }
 
 
@@ -67,7 +71,7 @@ public class DoodleActivity extends Activity implements DoodleEventListener<Inte
 
     @Override
     public void onNewInformation(Integer[] data) {
-        new LoadDoodlesAsync(this, mUIUpdater).execute(data);
+        new LoadDoodlesAsync(mUIUpdater).execute(data);
     }
 
     public void layoutOnClick(){

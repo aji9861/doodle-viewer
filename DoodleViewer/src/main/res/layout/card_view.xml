@@ -3,7 +3,6 @@
 <com.runnirr.doodleviewer.display.CardView
               xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              xmlns:cardview="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               style="@style/nowCardStyle"
               android:layout_width="match_parent"

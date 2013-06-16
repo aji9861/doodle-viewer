@@ -4,6 +4,7 @@
 package com.runnirr.doodleviewer.fetcher;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -23,8 +24,13 @@ public class DoodleBanner extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = width * getDrawable().getIntrinsicHeight() / getDrawable().getIntrinsicWidth();
-        setMeasuredDimension(width, height);
+        if (widthMeasureSpec != 0 && heightMeasureSpec != 0){
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            Drawable d = getDrawable();
+            if (d != null){
+                int height = width * d.getIntrinsicHeight() / d.getIntrinsicWidth();
+                setMeasuredDimension(width, height);
+            }
+        }
     }
 }

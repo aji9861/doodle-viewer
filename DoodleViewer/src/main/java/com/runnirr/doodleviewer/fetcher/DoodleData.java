@@ -110,7 +110,7 @@ public class DoodleData implements Serializable {
     }
 
     public Long getStartMilli(){
-        return start * 1000;
+        return start == null ? 0L : start * 1000;
     }
 
     public String getDateString(){

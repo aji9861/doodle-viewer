@@ -13,6 +13,8 @@ import java.util.Calendar;
 
 /**
  * Created by Adam on 6/15/13.
+ *
+ * Manager for setting of the user. Notifies appropriate listeners
  */
 public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> implements SlidingLayer.OnInteractListener {
     private final Spinner mMonthSelector;
@@ -59,7 +61,7 @@ public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> imp
 
     private int findYearIndex(Integer[] list, int i){
         for(int j = 0; j < list.length; j++){
-            if (list[j].intValue() == i){
+            if (list[j] == i){
                 return j;
             }
         }
@@ -158,7 +160,6 @@ public class SettingsManager extends SimpleDoodleEventTransmitter<Integer[]> imp
 
     /**
      * Integer for the month. January = 0
-     * @return
      */
     public static int getCurrentMonth(){
         return Calendar.getInstance().get(Calendar.MONTH);

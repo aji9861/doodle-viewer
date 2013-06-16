@@ -11,8 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,11 +23,9 @@ public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> {
 
     private static final String TAG = LoadDoodlesAsync.class.getSimpleName();
 
-    private final Activity mActivity;
     private final DoodleUIUpdater mUIUpdater;
 
-    public LoadDoodlesAsync(final Activity a, final DoodleUIUpdater ui){
-        mActivity = a;
+    public LoadDoodlesAsync(final DoodleUIUpdater ui){
         mUIUpdater = ui;
     }
 
@@ -95,7 +91,7 @@ public class LoadDoodlesAsync extends AsyncTask<Integer, Void, Void> {
 				Log.e(DoodleActivity.TAG, "CreateDoodleItems Exception", e);
 			}
 			if(dd != null){
-                AsyncTask<DoodleData, Void, Bitmap> imageTask = new LoadDoodleImageAsync().execute(dd);
+                new LoadDoodleImageAsync().execute(dd);
 			}else{
 				Log.e(DoodleActivity.TAG, "CreateDoodleItems: Error getting Doodle data");
 			}

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-/**
- * Created by Adam on 6/15/13.
- */
 public class CardView extends LinearLayout implements Comparable<CardView> {
+
+    private Long mStartTime = 0L;
+
     public CardView(Context context) {
         super(context);
     }
@@ -20,12 +20,17 @@ public class CardView extends LinearLayout implements Comparable<CardView> {
         super(context, attrs, defStyle);
     }
 
+
+    /*package*/ Long getStart(){
+        return mStartTime;
+    }
+
+    public void setStartTime(Long time){
+        mStartTime = time;
+    }
+
     @Override
     public int compareTo(CardView other) {
-        if (this == other){
-            return 0;
-        } else{
-            return 1;
-        }
+        return getStart().compareTo(other.getStart());
     }
 }

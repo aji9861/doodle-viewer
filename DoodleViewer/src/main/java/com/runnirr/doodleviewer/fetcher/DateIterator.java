@@ -5,17 +5,18 @@ import android.content.Context;
 import com.runnirr.doodleviewer.R;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Adam on 6/13/13.
+ *
+ * Utility class for going through date one month at a time
  */
 public class DateIterator {
     private final int EARLIEST_YEAR;
     private final int EARLIEST_MONTH;
 
-    private final int year;
-    private final int month;
+    public final int year;
+    public final int month;
 
     private final Context mContext;
 
@@ -32,7 +33,10 @@ public class DateIterator {
     }
 
 
-    public DateIterator next(){
+    /**
+     * @param lYear Year to go up to (inclusive) or null for no limit
+     */
+    public DateIterator next(Integer lYear){
         Calendar now = Calendar.getInstance();
         if(year > now.get(Calendar.YEAR) ||
             month >= now.get(Calendar.MONTH) && year == now.get(Calendar.YEAR) ){
@@ -41,14 +45,20 @@ public class DateIterator {
         }
         else if(month == Calendar.DECEMBER){
             // Changing years
-            return new DateIterator(mContext, year + 1, Calendar.JANUARY);
+            if(lYear != null && lYear >= year + 1){
+                return new DateIterator(mContext, year + 1, Calendar.JANUARY);
+            }
+            return null;
         }else{
             // In the middle of a year
             return new DateIterator(mContext, year, month + 1);
         }
     }
 
-    public DateIterator previous(){
+    /**
+     * @param lYear Year to go back to (inclusive), or null for no limit
+     */
+    public DateIterator previous(Integer lYear){
         if(year < EARLIEST_YEAR ||
                 year == EARLIEST_YEAR && month <= EARLIEST_MONTH){
             // No more Doodle to be found before this
@@ -56,18 +66,14 @@ public class DateIterator {
         }
         else if(month == Calendar.JANUARY){
             // Changing years
-            return new DateIterator(mContext, year - 1, Calendar.DECEMBER);
+            if(lYear != null && lYear <= year){
+                return new DateIterator(mContext, year - 1, Calendar.DECEMBER);
+            }
+            return null;
         }else{
             // In the middle of a year
             return new DateIterator(mContext, year, month - 1);
         }
     }
 
-    public int getMonth(){
-        return month + 1;
-    }
-
-    public int getYear(){
-        return year;
-    }
 }
